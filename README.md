@@ -1,6 +1,7 @@
 # abap2UI5 - RFC Connector
-Remotely call abap2UI5 apps via RFC 
+Remotely call abap2UI5 apps via RFC <br>
+🚧 work in progress 🚧
 
-<img width="700" alt="Screenshot 2024-06-02 at 16 37 09" src="https://github.com/abap2UI5/connector_rfc/assets/102328295/1d28fc64-00d1-4bb3-8fe3-52a9bb1bc278"><br>
-[Link](https://excalidraw.com/#json=iM_d4gLTFsb4J37GnXmEW,OoQD-ySo1Vn2kd6rJxbtWg)
+<img width="700" alt="Screenshot 2024-06-02 at 16 39 06" src="https://github.com/abap2UI5/connector_rfc/assets/102328295/ed3ec639-3ef8-4286-acf1-8aaeff29d440"><br>
+[Link](https://excalidraw.com/#json=Q7ZePSWY6pa4VrYWkZFvu,Z6OCNmJteClxhT_VtOx5rw)
 
