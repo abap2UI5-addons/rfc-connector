@@ -1,6 +1,9 @@
 # abap2UI5 - RFC Connector
+_Running into problems or found a bug? Create an issue [**here**](https://github.com/abap2UI5/abap2UI5/issues)_
+
 Remotely call abap2UI5 apps via RFC <br>
 
+### Approach
 <img width="1427" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/aeea4463-b642-4350-be47-8b5c4690aa50">
 <br>
 
