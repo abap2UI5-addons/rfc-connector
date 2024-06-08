@@ -1,6 +1,5 @@
-# abap2UI5 - RFC Connector - WIP  🚧
+# abap2UI5 - RFC Connector
 Remotely call abap2UI5 apps via RFC <br>
-🚧 work in progress 🚧
 
 <img width="1427" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/aeea4463-b642-4350-be47-8b5c4690aa50">
 <br>
@@ -11,6 +10,7 @@ Remotely call abap2UI5 apps via RFC <br>
 
 
 ### Installation
+Install this repository with [abapGit](https://abapgit.org) ![abapGit](https://docs.abapgit.org/img/favicon.png) on the system with your abap2UI5 apps. Install this handler on client system.
 Handler:
 ```abap
 CLASS z2ui5_cl_rfc_connector_handler DEFINITION
@@ -48,3 +48,4 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
 ENDCLASS.
 ```
+Setup destinations in SM50 that both systems can call each other and create an ICF Endpoint to call your abap2UI5 apps.
