@@ -4,7 +4,7 @@ _Running into problems or found a bug? Create an issue [**here**](https://github
 Remotely call abap2UI5 apps via RFC <br>
 
 ### Approach
-<img width="1427" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/aeea4463-b642-4350-be47-8b5c4690aa50">
+<img width="1420" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/5787755c-f4f1-48d8-a9da-50b4f04db9ed">
 <br>
 
 [Link](https://excalidraw.com/#json=Z27bQMS9ZH-3xgMDxLZ1R,WfuSCgOsHoJr8e339WSgjA)
