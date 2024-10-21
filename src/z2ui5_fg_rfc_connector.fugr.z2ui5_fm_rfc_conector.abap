@@ -2,14 +2,16 @@ FUNCTION z2ui5_fm_rfc_conector.
 *"----------------------------------------------------------------------
 *"*"Local Interface:
 *"  IMPORTING
-*"     VALUE(IV_METHOD) TYPE  STRING
-*"     VALUE(IV_REQUEST) TYPE  STRING
+*"     VALUE(IS_REQ) TYPE  Z2UI5_S_HTTP_REQ
+*"     VALUE(IS_CONFIG) TYPE  Z2UI5_S_HTTP_CONFIG
 *"  EXPORTING
-*"     VALUE(RV_RESPONSE) TYPE  STRING
+*"     VALUE(ES_RES) TYPE  Z2UI5_S_HTTP_RES
 *"----------------------------------------------------------------------
-  rv_response = SWITCH #( iv_method
-     WHEN 'GET'  THEN z2ui5_cl_http_handler=>http_get( )
-     WHEN 'POST' THEN z2ui5_cl_http_handler=>http_post( iv_request ) ).
+  DATA(ls_res) = z2ui5_cl_http_handler=>_main(
+        is_config = CORRESPONDING #( is_config )
+        is_req    = CORRESPONDING #( is_req )
+    ).
 
+  es_res = CORRESPONDING #( ls_res ).
 
 ENDFUNCTION.

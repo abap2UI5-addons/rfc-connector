@@ -17,17 +17,20 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
   METHOD if_http_extension~handle_request.
 
     "copy this class to the rfc connector client system
-
     DATA(lv_resp) = ``.
 
-    "setup the destination here
+    DATA(ls_req2) = z2ui5_cl_http_handler=>get_request( server = server ).
+
+    DATA(ls_config) = VALUE z2ui5_s_http_config( ).
+    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( ls_req2 ).
+    DATA(ls_res) = VALUE z2ui5_s_http_res( ).
+
     CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
-      DESTINATION 'NONE'
       EXPORTING
-        iv_method             = server->request->get_method( )
-        iv_request            = server->request->get_cdata( )
+        is_req                = ls_req
+        is_config             = ls_config
       IMPORTING
-        rv_response           = lv_resp
+        es_res                = ls_res
       EXCEPTIONS
         system_failure        = 1
         communication_failure = 2
@@ -36,9 +39,10 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
       ASSERT 1 = 0.
     ENDIF.
 
-    server->response->set_header_field( name = `cache-control` value = `no-cache` ).
-    server->response->set_cdata( lv_resp ).
-    server->response->set_status( code = 200 reason = `success` ).
+    z2ui5_cl_http_handler=>get_response(
+      server = server
+      is_res = CORRESPONDING #( ls_res )
+    ).
 
   ENDMETHOD.
 
