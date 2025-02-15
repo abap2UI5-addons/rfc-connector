@@ -1,4 +1,5 @@
 ## RFC Connector
 
-🚀 [More Information...](https://abap2ui5.github.io/docs/addons/rfc.html) <br>
+Remotely Call abap2UI5 Apps via RFC. More Information [here.](https://abap2ui5.github.io/docs/advanced/rfc.html)
+
 🐞 [Report Issues](https://github.com/abap2UI5/abap2UI5/issues) 
