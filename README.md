@@ -11,37 +11,37 @@ Remotely call abap2UI5 apps via RFC:
 Install this repository with abapGit on the system. Install this handler on client system.
 Handler:
 ```abap
-CLASS z2ui5_cl_rfc_connector_handler DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
-
+CLASS z2ui5_cl_rfc_connector_handler DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES if_http_extension.
-
-  PROTECTED SECTION.
-  PRIVATE SECTION.
 ENDCLASS.
 
 CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
-
   METHOD if_http_extension~handle_request.
 
-    DATA(lv_resp) = ``.
-    CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
-      DESTINATION 'NONE' "setup your destination here
-      EXPORTING
-        iv_method   = server->request->get_method( )
-        iv_request  = server->request->get_cdata( )
-      IMPORTING
-        rv_response = lv_resp.
+    DATA(ls_req2) = z2ui5_cl_http_handler=>get_request( server = server ).
+    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( ls_req2 ).
+    DATA(ls_config) = VALUE z2ui5_s_http_config( ).
+    DATA(ls_res) = VALUE z2ui5_s_http_res( ).
 
-    server->response->set_header_field( name = `cache-control` value = `no-cache` ).
-    server->response->set_cdata( lv_resp ).
-    server->response->set_status( code = 200 reason = `success` ).
+    CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
+      EXPORTING
+        is_req                = ls_req
+        is_config             = ls_config
+      IMPORTING
+        es_res                = ls_res
+      EXCEPTIONS
+        system_failure        = 1
+        communication_failure = 2
+        resource_failure      = 3.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    z2ui5_cl_http_handler=>get_response(
+      server = server
+      is_res = CORRESPONDING #( ls_res ) ).
 
   ENDMETHOD.
-
 ENDCLASS.
 ```
 Setup destinations in SM50 that both systems can call each other and create an ICF Endpoint to call your abap2UI5 apps.
