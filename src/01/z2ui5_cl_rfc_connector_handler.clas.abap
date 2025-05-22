@@ -22,6 +22,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     DATA(ls_res) = VALUE z2ui5_s_http_res( ).
 
     CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
+      DESTINATION 'NONE'
       EXPORTING
         is_req                = ls_req
         is_config             = ls_config
