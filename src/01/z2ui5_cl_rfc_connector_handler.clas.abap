@@ -16,13 +16,9 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
   METHOD if_http_extension~handle_request.
 
-    "copy this class to the rfc connector client system
-    DATA(lv_resp) = ``.
-
     DATA(ls_req2) = z2ui5_cl_http_handler=>get_request( server = server ).
-
-    DATA(ls_config) = VALUE z2ui5_s_http_config( ).
     DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( ls_req2 ).
+    DATA(ls_config) = VALUE z2ui5_s_http_config( ).
     DATA(ls_res) = VALUE z2ui5_s_http_res( ).
 
     CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
@@ -41,8 +37,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
     z2ui5_cl_http_handler=>get_response(
       server = server
-      is_res = CORRESPONDING #( ls_res )
-    ).
+      is_res = CORRESPONDING #( ls_res ) ).
 
   ENDMETHOD.
 
