@@ -8,40 +8,12 @@ Remotely call abap2UI5 apps via RFC:
 <br>
 
 ### Installation
-Install this repository with abapGit on the system. Install this handler on client system.
-Handler:
-```abap
-CLASS z2ui5_cl_rfc_connector_handler DEFINITION PUBLIC.
-  PUBLIC SECTION.
-    INTERFACES if_http_extension.
-ENDCLASS.
 
-CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
-  METHOD if_http_extension~handle_request.
+Prerequisite: Set up a destination in SM59 that the source system can be called via RFC.
 
-    DATA(ls_req2) = z2ui5_cl_http_handler=>get_request( server = server ).
-    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( ls_req2 ).
-    DATA(ls_config) = VALUE z2ui5_s_http_config( ).
-    DATA(ls_res) = VALUE z2ui5_s_http_res( ).
+Steps:
+1. Install this repository on both system.
+2. Replace in the HTTP handler the destination `NONE` with your Source System Destination
+3. Call iny our browser the endpoint `.../sap/bc/2ui5_rfc`
 
-    CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
-      EXPORTING
-        is_req                = ls_req
-        is_config             = ls_config
-      IMPORTING
-        es_res                = ls_res
-      EXCEPTIONS
-        system_failure        = 1
-        communication_failure = 2
-        resource_failure      = 3.
-    IF sy-subrc <> 0.
-      ASSERT 1 = 0.
-    ENDIF.
-    z2ui5_cl_http_handler=>get_response(
-      server = server
-      is_res = CORRESPONDING #( ls_res ) ).
 
-  ENDMETHOD.
-ENDCLASS.
-```
-Setup destinations in SM50 that both systems can call each other and create an ICF Endpoint to call your abap2UI5 apps.
