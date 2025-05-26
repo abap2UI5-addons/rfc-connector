@@ -1,3 +1,5 @@
+[![ABAP_STANDARD](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ABAP_STANDARD.yaml)
+
 ## RFC Connector
 
 Remotely Call abap2UI5 Apps via RFC.
