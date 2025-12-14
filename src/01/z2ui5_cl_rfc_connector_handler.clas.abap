@@ -36,10 +36,10 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
       ASSERT 1 = 0.
     ENDIF.
 
-    server->set_cdata( ls_res-body ).
-    server->set_header_field( n = `cache-control`
+    server->response->set_cdata( ls_res-body ).
+    server->response->response->set_header_field( n = `cache-control`
                              v = `no-cache` ).
-    server->set_status( code   = 200
+    server->response->IF_HTTP_RESPONSE~SET_STATUS->set_status( code   = 200
                     reason = `success` ).
 
   ENDMETHOD.
