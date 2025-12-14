@@ -37,7 +37,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     ENDIF.
 
     server->response->set_cdata( ls_res-body ).
-    server->response->response->set_header_field( n = `cache-control`
+    server->response->set_header_field( n = `cache-control`
                              v = `no-cache` ).
 
   ENDMETHOD.
