@@ -8,7 +8,6 @@ FUNCTION z2ui5_fm_rfc_conector.
 *"     VALUE(ES_RES) TYPE  Z2UI5_S_HTTP_RES
 *"----------------------------------------------------------------------
   DATA(ls_res) = z2ui5_cl_http_handler=>_main(
-        is_config = CORRESPONDING #( is_config )
         is_req    = CORRESPONDING #( is_req )
     ).
 
