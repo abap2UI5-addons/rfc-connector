@@ -48,7 +48,9 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     DATA lv_destination TYPE c LENGTH 32.
 
     DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).
-    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( z2ui5_cl_ui5_http_handler=>get_request( server = server ) ).
+    " method, body, path and the raw query - the structure has no room for
+    " the parsed t_params, the source system parses the query again
+    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( lo_server->get_req_info( ) ).
 
     IF ls_req-method = `POST`
        AND z2ui5_cl_ui5_http_handler=>_check_csrf_rejected(

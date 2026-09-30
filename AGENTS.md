@@ -32,8 +32,9 @@ three structures are a public interface:
   configuration from its own user exit. It stays because removing it breaks
   every consumer still on the previous version.
 - A new field is additive, but the README asks for the same version on both
-  systems for a reason: the handler has to cope with a source that answers
-  without it (see the `status_code IS INITIAL` branch).
+  systems for a reason: each side has to cope with the other still on the
+  previous version (see the `status_code IS INITIAL` branch; a consumer
+  without `PATH`/`QUERY` sends them empty, which is what it did before).
 
 ## What this depends on in the core
 
@@ -47,12 +48,13 @@ The connector calls:
 | Member | Where in the core | Status |
 | --- | --- | --- |
 | `z2ui5_cl_ui5_http_handler=>_main` | `src/02` | released; the entry point that runs one roundtrip |
-| `z2ui5_cl_ui5_http_handler=>get_request` | `src/02` | released, but the core marks it as having no caller and as a candidate for its next API revision — it does not know about this one |
 | `z2ui5_cl_ui5_http_handler=>_check_csrf_rejected` | `src/02` | released |
-| `z2ui5_cl_ui5_util_http=>factory` | `src/00/03` | not released — used **on purpose**, see below |
+| `z2ui5_cl_ui5_util_http=>factory`, `->get_req_info` | `src/00/03` | not released — used **on purpose**, see below. `get_req_info` carries the raw `query` only in releases newer than 1.146.0; on an older core the field is simply not filled |
+| `z2ui5_cl_ui5_util_context=>url_param_get_tab` | `src/00/03` | not released — the source side parses the forwarded query with it, exactly as `get_req_info` parses an ICF request |
 
 Both systems need abap2UI5 1.143.0 or newer, the first release with
-`z2ui5_cl_ui5_http_handler`.
+`z2ui5_cl_ui5_http_handler`. The query string is forwarded only from a consumer
+on a release newer than 1.146.0; this repository compiles against either.
 
 ### z2ui5_cl_ui5_util_http stays
 
