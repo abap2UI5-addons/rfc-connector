@@ -1,13 +1,20 @@
 {
-    "global": {
-      "files": "/src/**/*.*"
-    },
-    "dependencies": [
+  // Syntax, resolved against the abap2UI5 core. There is no version pin on
+  // that dependency - abaplint clones its main branch - which is why the
+  // workflows also run weekly: a rename upstream breaks this repository
+  // silently otherwise.
+  "global": {
+    "files": "/src/**/*.*"
+  },
+  "dependencies": [
     {
+      // the on-premise API set, not steampunk: the connector is an ICF
+      // handler (if_http_extension) and calls RFC / SM59 destinations, none
+      // of which exist in ABAP Cloud
       "url": "https://github.com/abaplint/deps",
       "folder": "/deps",
       "files": "/src/**/*.*"
-  },
+    },
     {
       "url": "https://github.com/abap2UI5/abap2UI5",
       "folder": "/abap2UI5",
@@ -15,6 +22,8 @@
     }
   ],
   "syntax": {
+    // the connector runs on both systems, consumer and source, so it follows
+    // the core's own floor; "downport" keeps it translatable to 7.02
     "version": "v750",
     "errorNamespace": "."
   },

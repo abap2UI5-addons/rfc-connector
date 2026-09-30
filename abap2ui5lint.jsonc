@@ -1,0 +1,29 @@
+{
+  // abap2UI5-linter - https://github.com/abap2UI5/linter
+  "$schema": "./node_modules/@abap2ui5/linter/data/abap2ui5lint.schema.json",
+
+  "paths": ["src"],
+
+  // This repository builds no view, so by default the linter would find
+  // nothing to check and pass. allClasses judges every class by the
+  // source-side rules instead - the abapGit round-trip family, activation
+  // and hygiene, and the released-API check, which is the one that matters
+  // here: the connector calls into the core, and a call into a class the
+  // core does not release can break with any core refactor.
+  "allClasses": true,
+
+  // no view, nothing to render - and no browser to download in CI
+  "render": false,
+  "ui5": "1.71",
+  "distribution": "openui5",
+
+  // Adoption-time debt: the handler reads and writes the ICF request through
+  // z2ui5_cl_ui5_util_http, a vendored utility in the core's src/00/03 that is
+  // not released API (see AGENTS.md, "What this depends on in the core").
+  // Findings recorded here are counted and never listed; a NEW one fails,
+  // and an entry whose finding is gone is stale and fails too - so this file
+  // only shrinks. Refresh it with `npx abap2ui5lint --update-baseline`.
+  "baseline": "abap2ui5lint-baseline.json",
+
+  "failOn": "warning"
+}

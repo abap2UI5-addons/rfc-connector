@@ -1,0 +1,37 @@
+name: check-abap2ui5
+
+# The abap2UI5-specific lint, as opposed to abap-standard, which lints ABAP
+# itself. This repository builds no view, so what it runs here is the
+# source-side half (abap2ui5lint.jsonc sets allClasses): above all the
+# released-API check - the connector calls into the core, and a call into a
+# class the core does not release is one a core refactor may break without
+# notice. No render gate and so no browser: there is no view to render.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # nothing else notices when an upstream rename breaks this repository
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-abap2ui5-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-abap2ui5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+        cache: 'npm'
+    - run: npm ci
+    - run: npx abap2ui5lint

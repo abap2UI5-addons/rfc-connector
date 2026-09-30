@@ -1,8 +1,11 @@
-[![ABAP_STANDARD](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ABAP_STANDARD.yaml)
+[![abap-standard](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/abap-standard.yaml/badge.svg)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/abap-standard.yaml)
+[![check-abap2ui5](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/check-abap2ui5.yaml/badge.svg)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/check-abap2ui5.yaml)
 
 ## RFC Connector
 
 Remotely Call abap2UI5 Apps via RFC.
+
+A source repository of the abap2UI5 ecosystem, installed with abapGit on two systems: the one the browser talks to and the one the apps run on.
 
 #### Approach
 
@@ -34,4 +37,4 @@ Steps:
 * **The consumer forwards method, body and status, not headers.** Everything abap2UI5 needs for a roundtrip travels in the body; a request header an app reads through the user exit on the source system does not.
 
 #### Contribution & Support
-Pull requests are welcome! Whether you're fixing bugs, adding new functionality, or improving documentation, your contributions are highly appreciated. If you encounter any issues, feel free to open an issue.
+Pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for what CI checks. Whether you're fixing bugs, adding new functionality, or improving documentation, your contributions are highly appreciated. If you encounter any issues, feel free to open an issue.
