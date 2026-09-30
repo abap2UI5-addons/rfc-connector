@@ -59,7 +59,10 @@ Both systems need abap2UI5 1.143.0 or newer, the first release with
 Going through the core's own HTTP utility instead of `if_http_server` /
 `cl_http_client` directly is a deliberate maintainer decision: the connector
 handles the request exactly the way the framework does. Do not rewrite it to
-the kernel APIs to satisfy the linter. The finding is accepted in
+the kernel APIs to satisfy the linter. When the connector needs something
+the utility does not offer, extend `z2ui5_cl_ui5_util_http` in the core
+(abap2UI5, `src/00/03`) and use that here — never work around it with direct
+kernel calls in this repository. The finding is accepted in
 `abap2ui5lint-baseline.json`; the price is that a rename of that class in the
 core breaks this repository, which the weekly scheduled run exists to notice.
 
