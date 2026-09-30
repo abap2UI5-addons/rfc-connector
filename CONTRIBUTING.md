@@ -21,7 +21,7 @@ executed.
 | Gate | What it proves |
 | --- | --- |
 | `npm run lint` | abaplint: syntax, resolved against the abap2UI5 core |
-| `npm run check:abap2ui5` | [abap2UI5-linter](https://github.com/abap2UI5/linter), source-side rules only (there is no view here): above all that the connector calls only the core's released API |
+| `npm run check:abap2ui5` | [abap2UI5-linter](https://github.com/abap2UI5/linter), source-side rules only (there is no view here): abapGit round trip, activation, and that the connector names no unreleased core object beyond the one it uses on purpose |
 
 The abap2UI5-linter keeps a baseline in `abap2ui5lint-baseline.json`. Findings
 recorded there are counted and never listed; a **new** finding fails the gate,

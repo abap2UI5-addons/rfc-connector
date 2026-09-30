@@ -49,10 +49,19 @@ The connector calls:
 | `z2ui5_cl_ui5_http_handler=>_main` | `src/02` | released; the entry point that runs one roundtrip |
 | `z2ui5_cl_ui5_http_handler=>get_request` | `src/02` | released, but the core marks it as having no caller and as a candidate for its next API revision — it does not know about this one |
 | `z2ui5_cl_ui5_http_handler=>_check_csrf_rejected` | `src/02` | released |
-| `z2ui5_cl_ui5_util_http=>factory` | `src/00/03` | **not released** — a vendored utility the core may rename without notice; recorded in `abap2ui5lint-baseline.json` |
+| `z2ui5_cl_ui5_util_http=>factory` | `src/00/03` | not released — used **on purpose**, see below |
 
 Both systems need abap2UI5 1.143.0 or newer, the first release with
 `z2ui5_cl_ui5_http_handler`.
+
+### z2ui5_cl_ui5_util_http stays
+
+Going through the core's own HTTP utility instead of `if_http_server` /
+`cl_http_client` directly is a deliberate maintainer decision: the connector
+handles the request exactly the way the framework does. Do not rewrite it to
+the kernel APIs to satisfy the linter. The finding is accepted in
+`abap2ui5lint-baseline.json`; the price is that a rename of that class in the
+core breaks this repository, which the weekly scheduled run exists to notice.
 
 ## Build and verify
 

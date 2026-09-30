@@ -3,9 +3,9 @@ name: check-abap2ui5
 # The abap2UI5-specific lint, as opposed to abap-standard, which lints ABAP
 # itself. This repository builds no view, so what it runs here is the
 # source-side half (abap2ui5lint.jsonc sets allClasses): above all the
-# released-API check - the connector calls into the core, and a call into a
-# class the core does not release is one a core refactor may break without
-# notice. No render gate and so no browser: there is no view to render.
+# released-API check. The one unreleased class the connector uses on purpose
+# (z2ui5_cl_ui5_util_http) is accepted in the baseline; any other one fails.
+# No render gate and so no browser: there is no view to render.
 
 on:
   pull_request:
