@@ -12,7 +12,7 @@ CLASS z2ui5_cl_rfc_connector_handler DEFINITION
     " of the framework has to run here - over RFC the source system sees no
     " request headers at all and lets every POST through. Set to abap_false
     " only if the source system opts out through its own user exit
-    " (z2ui5_if_exit~set_config_http_post -> check_csrf_active).
+    " (z2ui5_if_ui5_exit~set_config_http_post -> check_csrf_active).
     CONSTANTS c_check_csrf TYPE abap_bool VALUE abap_true.
 
   PROTECTED SECTION.

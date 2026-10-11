@@ -17,6 +17,9 @@
     },
     {
       "url": "https://github.com/abap2UI5/abap2UI5",
+      // main on purpose (see the comment at the top), declared rather than
+      // left off - abap2UI5 CONVENTIONS §9
+      "branch": "main",
       "folder": "/abap2UI5",
       "files": "/src/**/*.*"
     }
