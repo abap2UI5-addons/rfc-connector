@@ -41,6 +41,8 @@ browser talks to and the **source system** the apps run on.
 **Requirements**
 
 - Standard ABAP 7.50 or higher on both systems
+- NetWeaver 7.02 - 7.40: the branch `702`, downported automatically from
+  `main` on every push - pull abap2UI5 from their `702` branches as well
 - [abap2UI5](https://github.com/abap2UI5/abap2UI5) **1.143.0 or newer** on both
   systems - the connector calls `z2ui5_cl_ui5_http_handler`, which first
   shipped with that release. URL parameters (`?z2ui5-bundle`, `app_start` for
