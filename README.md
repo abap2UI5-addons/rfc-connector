@@ -17,7 +17,7 @@ reach the apps of another system through one entry point.
 
 ```
 Browser ── GET/POST ──> Consumer System                     Source System
-                        /sap/bc/z2ui5_rfc                   Z2UI5_FM_RFC_CONECTOR
+                        /sap/bc/z2ui5_rfc                   Z2UI5_FM_RFC_CONNECTOR
                         Z2UI5_CL_RFC_CONNECTOR_HANDLER        │
                           │                                   │
                           └── RFC (SM59 destination) ────────>└──> z2ui5_cl_ui5_http_handler
@@ -61,12 +61,16 @@ browser talks to and the **source system** the apps run on.
 1. Install [abap2UI5](https://github.com/abap2UI5/abap2UI5) on both systems.
 2. Install this repository on **both** systems — the same version on each:
    consumer and source exchange the DDIC structures of this repository over RFC.
+   When you update, update the **source system first**: the consumer calls
+   `Z2UI5_FM_RFC_CONNECTOR`, which an older source does not have yet. The
+   source keeps `Z2UI5_FM_RFC_CONECTOR`, the misspelled name of earlier
+   versions, so consumers that are not updated yet carry on working.
 3. On the **consumer system**, replace in the HTTP handler
    `Z2UI5_CL_RFC_CONNECTOR_HANDLER` the destination `NONE` with your source
    system destination.
 4. On the **consumer system**, activate the ICF node `/sap/bc/z2ui5_rfc` in
    transaction SICF. The source system needs no ICF node - it is called through
-   the RFC-enabled function module `Z2UI5_FM_RFC_CONECTOR`.
+   the RFC-enabled function module `Z2UI5_FM_RFC_CONNECTOR`.
 
 **Start** - call the endpoint `.../sap/bc/z2ui5_rfc` of the **consumer
 system** in your browser.
@@ -80,7 +84,7 @@ The consumer system receives the browser request, forwards method, body, path an
 | System | Entry | Object |
 |---|---|---|
 | Consumer | ICF node `/sap/bc/z2ui5_rfc` | `Z2UI5_CL_RFC_CONNECTOR_HANDLER` |
-| Source | RFC-enabled function module | `Z2UI5_FM_RFC_CONECTOR` (function group `Z2UI5_FG_RFC_CONNECTOR`) |
+| Source | RFC-enabled function module | `Z2UI5_FM_RFC_CONNECTOR` (function group `Z2UI5_FG_RFC_CONNECTOR`) |
 | Both | DDIC structures exchanged over RFC | `Z2UI5_S_HTTP_REQ`, `Z2UI5_S_HTTP_RES`, `Z2UI5_S_HTTP_CONFIG` |
 
 <img width="700" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/5787755c-f4f1-48d8-a9da-50b4f04db9ed">

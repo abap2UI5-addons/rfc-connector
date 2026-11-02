@@ -18,7 +18,7 @@ consumer and source, in the same version — and depends on the
 | Path | Contents |
 | --- | --- |
 | `src/01` | Consumer side: the ICF handler `z2ui5_cl_rfc_connector_handler` and its SICF node `/sap/bc/z2ui5_rfc` |
-| `src/02` | Source side: function group `z2ui5_fg_rfc_connector` with the RFC-enabled `Z2UI5_FM_RFC_CONECTOR` |
+| `src/02` | Source side: function group `z2ui5_fg_rfc_connector` with the RFC-enabled `Z2UI5_FM_RFC_CONNECTOR`, and `Z2UI5_FM_RFC_CONECTOR` - its name before the spelling was fixed, a wrapper for consumers on an earlier version |
 | `src/` | The DDIC structures both sides exchange: `z2ui5_s_http_req`, `z2ui5_s_http_res`, `z2ui5_s_http_config` |
 
 ## The RFC interface is a contract between two systems
@@ -26,8 +26,11 @@ consumer and source, in the same version — and depends on the
 Consumer and source are updated independently, so the function module and the
 three structures are a public interface:
 
-- Never rename or remove a parameter of `Z2UI5_FM_RFC_CONECTOR` or a field of
-  the three structures. The misspelling `CONECTOR` is part of that contract.
+- Never rename or remove a parameter of `Z2UI5_FM_RFC_CONNECTOR` or a field of
+  the three structures. `Z2UI5_FM_RFC_CONECTOR`, the misspelled name consumers
+  called up to 2026-11, stays as a wrapper with the same interface: a consumer
+  on an earlier version still calls it, so never remove it. The consumer calls
+  the new name, so a source system has to be updated before its consumers.
 - `IS_CONFIG` is reserved and unused — the source system reads its HTTP
   configuration from its own user exit. It stays because removing it breaks
   every consumer still on the previous version.

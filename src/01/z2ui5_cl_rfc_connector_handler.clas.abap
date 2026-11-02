@@ -75,7 +75,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
       lv_destination = c_destination.
 
-      CALL FUNCTION 'Z2UI5_FM_RFC_CONECTOR'
+      CALL FUNCTION 'Z2UI5_FM_RFC_CONNECTOR'
         DESTINATION lv_destination
         EXPORTING
           is_req                = ls_req
