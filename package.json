@@ -25,7 +25,7 @@
   "homepage": "https://github.com/abap2UI5-addons/rfc-connector#readme",
   "devDependencies": {
     "@abap2ui5/linter": "^0.9.0",
-    "@abaplint/cli": "^2.120.86"
+    "@abaplint/cli": "^2.120.92"
   },
   "engines": {
     "node": ">=22"
