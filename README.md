@@ -51,6 +51,8 @@ browser talks to and the **source system** the apps run on.
 - On the consumer system: a destination in SM59 (type 3) pointing to the
   source system, with login data maintained
 
+**Renamed (2026-11).** The structures `Z2UI5_S_HTTP_REQ`, `_RES` and `_CONFIG` are `Z2UI5_S_RFC_REQ`, `_RES` and `_CONFIG` now, and the function module is spelled `Z2UI5_FM_RFC_CONNECTOR`. RFC matches the structures by their fields, so a system on the old names still talks to one on the new names. After the pull abapGit lists the old structures as deleted in the repository - delete them.
+
 **Steps** - with [abapGit](https://abapgit.org):
 
 | System | What to install |
@@ -85,7 +87,7 @@ The consumer system receives the browser request, forwards method, body, path an
 |---|---|---|
 | Consumer | ICF node `/sap/bc/z2ui5_rfc` | `Z2UI5_CL_RFC_CONNECTOR_HANDLER` |
 | Source | RFC-enabled function module | `Z2UI5_FM_RFC_CONNECTOR` (function group `Z2UI5_FG_RFC_CONNECTOR`) |
-| Both | DDIC structures exchanged over RFC | `Z2UI5_S_HTTP_REQ`, `Z2UI5_S_HTTP_RES`, `Z2UI5_S_HTTP_CONFIG` |
+| Both | DDIC structures exchanged over RFC | `Z2UI5_S_RFC_REQ`, `Z2UI5_S_RFC_RES`, `Z2UI5_S_RFC_CONFIG` |
 
 <img width="700" alt="image" src="https://github.com/abap2UI5/abap2UI5-connector_rfc/assets/102328295/5787755c-f4f1-48d8-a9da-50b4f04db9ed">
 

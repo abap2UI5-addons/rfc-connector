@@ -15,17 +15,17 @@
      <IMPORT>
       <RSIMP>
        <PARAMETER>IS_REQ</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_REQ</TYP>
+       <TYP>Z2UI5_S_RFC_REQ</TYP>
       </RSIMP>
       <RSIMP>
        <PARAMETER>IS_CONFIG</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_CONFIG</TYP>
+       <TYP>Z2UI5_S_RFC_CONFIG</TYP>
       </RSIMP>
      </IMPORT>
      <EXPORT>
       <RSEXP>
        <PARAMETER>ES_RES</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_RES</TYP>
+       <TYP>Z2UI5_S_RFC_RES</TYP>
       </RSEXP>
      </EXPORT>
      <DOCUMENTATION>
@@ -50,17 +50,17 @@
      <IMPORT>
       <RSIMP>
        <PARAMETER>IS_REQ</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_REQ</TYP>
+       <TYP>Z2UI5_S_RFC_REQ</TYP>
       </RSIMP>
       <RSIMP>
        <PARAMETER>IS_CONFIG</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_CONFIG</TYP>
+       <TYP>Z2UI5_S_RFC_CONFIG</TYP>
       </RSIMP>
      </IMPORT>
      <EXPORT>
       <RSEXP>
        <PARAMETER>ES_RES</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_RES</TYP>
+       <TYP>Z2UI5_S_RFC_RES</TYP>
       </RSEXP>
      </EXPORT>
      <DOCUMENTATION>

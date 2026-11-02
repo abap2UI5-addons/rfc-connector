@@ -39,8 +39,8 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
   METHOD if_http_extension~handle_request.
 
-    DATA ls_res         TYPE z2ui5_s_http_res.
-    DATA ls_config      TYPE z2ui5_s_http_config.
+    DATA ls_res         TYPE z2ui5_s_rfc_res.
+    DATA ls_config      TYPE z2ui5_s_rfc_config.
     DATA lv_message     TYPE string.
     " DESTINATION takes a character field, so the constant cannot be passed
     " directly - and it stays a string so the error message below does not
@@ -50,7 +50,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).
     " method, body, path and the raw query - the structure has no room for
     " the parsed t_params, the source system parses the query again
-    DATA(ls_req) = CORRESPONDING z2ui5_s_http_req( lo_server->get_req_info( ) ).
+    DATA(ls_req) = CORRESPONDING z2ui5_s_rfc_req( lo_server->get_req_info( ) ).
 
     IF ls_req-method = `POST`
        AND z2ui5_cl_ui5_http_handler=>_check_csrf_rejected(
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
       ELSEIF ls_res-status_code IS INITIAL.
         " A source system still running a connector version whose
-        " Z2UI5_S_HTTP_RES has no status fields answers with 0, which the ICF
+        " Z2UI5_S_RFC_RES has no status fields answers with 0, which the ICF
         " sends as an empty response the browser cannot read.
         ls_res-status_code   = 200.
         ls_res-status_reason = `OK`.
