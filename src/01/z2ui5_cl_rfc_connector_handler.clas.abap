@@ -43,8 +43,8 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     DATA ls_config      TYPE z2ui5_s_rfc_config.
     DATA lv_message     TYPE string.
     " DESTINATION takes a character field, so the constant cannot be passed
-    " directly - and it stays a string so the error message below does not
-    " carry the padding of a fixed-length field
+    " directly - the constant itself stays a string, so the error message
+    " below does not carry the padding of a fixed-length field
     DATA lv_destination TYPE c LENGTH 32.
 
     DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).

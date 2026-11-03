@@ -21,7 +21,7 @@ executed.
 | Gate | What it proves |
 | --- | --- |
 | `npm run lint` | abaplint: syntax and the rule set of abap2UI5's own `abaplint.jsonc`, resolved against the abap2UI5 core |
-| `npm run check:abap2ui5` | [abap2UI5-linter](https://github.com/abap2UI5/linter), source-side rules only (there is no view here): abapGit round trip, activation, and that the connector names no unreleased core object beyond the one it uses on purpose |
+| `npm run check:abap2ui5` | [abap2UI5-linter](https://github.com/abap2UI5/linter), source-side rules only (there is no view here): abapGit round trip, activation, and that the connector's classes name no unreleased core object beyond `z2ui5_cl_ui5_util_http`, used on purpose. The function module also uses `z2ui5_cl_ui5_util_context` on purpose; the released-API check does not see function-group code |
 
 The abap2UI5-linter keeps a baseline in `abap2ui5lint-baseline.json`. Findings
 recorded there are counted and never listed; a **new** finding fails the gate,

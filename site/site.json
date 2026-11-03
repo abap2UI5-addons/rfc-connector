@@ -1,0 +1,5 @@
+{
+  "repo": "rfc-connector",
+  "title": "RFC Connector",
+  "description": "Call abap2UI5 apps on another system via RFC."
+}

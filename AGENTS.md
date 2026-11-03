@@ -56,12 +56,12 @@ The connector calls:
 | --- | --- | --- |
 | `z2ui5_cl_ui5_http_handler=>_main` | `src/02` | released; the entry point that runs one roundtrip |
 | `z2ui5_cl_ui5_http_handler=>_check_csrf_rejected` | `src/02` | released |
-| `z2ui5_cl_ui5_util_http=>factory`, `->get_req_info` | `src/00/03` | not released — used **on purpose**, see below. `get_req_info` carries the raw `query` only in releases newer than 1.146.0; on an older core the field is simply not filled |
+| `z2ui5_cl_ui5_util_http=>factory`, `->get_req_info` | `src/00/03` | not released — used **on purpose**, see below. `get_req_info` carries the raw `query` only from release 1.147.0 on; on an older core the field is simply not filled |
 | `z2ui5_cl_ui5_util_context=>url_param_get_tab` | `src/00/03` | not released — the source side parses the forwarded query with it, exactly as `get_req_info` parses an ICF request |
 
 Both systems need abap2UI5 1.143.0 or newer, the first release with
 `z2ui5_cl_ui5_http_handler`. The query string is forwarded only from a consumer
-on a release newer than 1.146.0; this repository compiles against either.
+on release 1.147.0 or newer; this repository compiles against either.
 
 ### z2ui5_cl_ui5_util_http stays
 
@@ -94,7 +94,7 @@ verified in a system.
 ## Conventions
 
 - ABAP object names start with `z2ui5_`; the connector's own objects carry
-  `rfc_connector`.
+  `rfc`.
 - Syntax level v750 with the `downport` rule, the same floor as the core.
 - English for code, comments, commit messages, pull requests and issues.
 - All text files are LF-only (`.gitattributes`).

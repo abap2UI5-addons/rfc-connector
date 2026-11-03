@@ -13,7 +13,7 @@ system, which forwards every request through an SM59 RFC destination to the
 source system where the abap2UI5 apps run. For landscapes where users should
 reach the apps of another system through one entry point.
 
-> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org).
+> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org). Documentation: [abap2ui5-addons.github.io/rfc-connector](https://abap2ui5-addons.github.io/rfc-connector/).
 
 ```
 Browser ── GET/POST ──> Consumer System                     Source System
@@ -42,12 +42,12 @@ browser talks to and the **source system** the apps run on.
 
 - Standard ABAP 7.50 or higher on both systems
 - NetWeaver 7.02 - 7.40: the branch `702`, downported automatically from
-  `main` on every push - pull abap2UI5 from their `702` branches as well
+  `main` on every push - pull abap2UI5 from its `702` branch as well
 - [abap2UI5](https://github.com/abap2UI5/abap2UI5) **1.143.0 or newer** on both
   systems - the connector calls `z2ui5_cl_ui5_http_handler`, which first
   shipped with that release. URL parameters (`?z2ui5-bundle`, `app_start` for
   the user exit, …) are forwarded only when the consumer runs an abap2UI5
-  release **newer than 1.146.0**; on an older one they stay behind, as before.
+  release **1.147.0 or newer**; on an older one they stay behind, as before.
 - On the consumer system: a destination in SM59 (type 3) pointing to the
   source system, with login data maintained
 
