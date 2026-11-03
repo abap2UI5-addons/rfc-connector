@@ -34,7 +34,7 @@ rfc-connector puts a thin ICF handler on a consumer system that the browser talk
 
 - Standard ABAP 7.50 or higher on both systems
 - abap2UI5 1.143.0 or newer on both systems
-- abap2UI5 newer than 1.146.0 on the consumer to forward URL parameters
+- abap2UI5 1.147.0 or newer on the consumer to forward URL parameters
 - An SM59 destination (type 3) on the consumer system pointing to the source system with login data
 - Stateless apps only; request headers are not forwarded
 

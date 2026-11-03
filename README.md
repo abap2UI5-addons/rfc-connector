@@ -47,7 +47,7 @@ browser talks to and the **source system** the apps run on.
   systems - the connector calls `z2ui5_cl_ui5_http_handler`, which first
   shipped with that release. URL parameters (`?z2ui5-bundle`, `app_start` for
   the user exit, …) are forwarded only when the consumer runs an abap2UI5
-  release **newer than 1.146.0**; on an older one they stay behind, as before.
+  release **1.147.0 or newer**; on an older one they stay behind, as before.
 - On the consumer system: a destination in SM59 (type 3) pointing to the
   source system, with login data maintained
 
