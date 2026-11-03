@@ -13,7 +13,7 @@ system, which forwards every request through an SM59 RFC destination to the
 source system where the abap2UI5 apps run. For landscapes where users should
 reach the apps of another system through one entry point.
 
-> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org).
+> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org). Documentation: [abap2ui5-addons.github.io/rfc-connector](https://abap2ui5-addons.github.io/rfc-connector/).
 
 ```
 Browser ── GET/POST ──> Consumer System                     Source System
