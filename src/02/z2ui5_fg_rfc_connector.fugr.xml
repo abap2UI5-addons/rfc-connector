@@ -11,21 +11,56 @@
     <item>
      <FUNCNAME>Z2UI5_FM_RFC_CONECTOR</FUNCNAME>
      <REMOTE_CALL>R</REMOTE_CALL>
-     <SHORT_TEXT>abap2UI5 - rfc connector server</SHORT_TEXT>
+     <SHORT_TEXT>abap2UI5 - rfc connector server (old name)</SHORT_TEXT>
      <IMPORT>
       <RSIMP>
        <PARAMETER>IS_REQ</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_REQ</TYP>
+       <TYP>Z2UI5_S_RFC_REQ</TYP>
       </RSIMP>
       <RSIMP>
        <PARAMETER>IS_CONFIG</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_CONFIG</TYP>
+       <TYP>Z2UI5_S_RFC_CONFIG</TYP>
       </RSIMP>
      </IMPORT>
      <EXPORT>
       <RSEXP>
        <PARAMETER>ES_RES</PARAMETER>
-       <TYP>Z2UI5_S_HTTP_RES</TYP>
+       <TYP>Z2UI5_S_RFC_RES</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IS_REQ</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IS_CONFIG</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ES_RES</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z2UI5_FM_RFC_CONNECTOR</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>abap2UI5 - rfc connector server</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IS_REQ</PARAMETER>
+       <TYP>Z2UI5_S_RFC_REQ</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IS_CONFIG</PARAMETER>
+       <TYP>Z2UI5_S_RFC_CONFIG</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ES_RES</PARAMETER>
+       <TYP>Z2UI5_S_RFC_RES</TYP>
       </RSEXP>
      </EXPORT>
      <DOCUMENTATION>
