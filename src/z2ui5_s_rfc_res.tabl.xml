@@ -6,7 +6,7 @@
     <TABNAME>Z2UI5_S_RFC_RES</TABNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <TABCLASS>INTTAB</TABCLASS>
-    <DDTEXT>http response</DDTEXT>
+    <DDTEXT>abap2UI5 - rfc connector response</DDTEXT>
     <MASTERLANG>E</MASTERLANG>
     <EXCLASS>1</EXCLASS>
    </DD02V>

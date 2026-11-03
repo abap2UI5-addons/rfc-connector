@@ -6,7 +6,7 @@
     <TABNAME>Z2UI5_S_RFC_CONFIG</TABNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <TABCLASS>INTTAB</TABCLASS>
-    <DDTEXT>http config</DDTEXT>
+    <DDTEXT>abap2UI5 - rfc connector config (reserved)</DDTEXT>
     <MASTERLANG>E</MASTERLANG>
     <EXCLASS>1</EXCLASS>
    </DD02V>
