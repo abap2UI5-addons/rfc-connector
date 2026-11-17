@@ -47,10 +47,17 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     " below does not carry the padding of a fixed-length field
     DATA lv_destination TYPE c LENGTH 32.
 
-    DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).
+    DATA lo_server TYPE REF TO z2ui5_cl_ui5_util_http.
+    DATA temp1 TYPE z2ui5_s_rfc_req.
+    DATA ls_req LIKE temp1.
+    lo_server = z2ui5_cl_ui5_util_http=>factory( server ).
     " method, body, path and the raw query - the structure has no room for
     " the parsed t_params, the source system parses the query again
-    DATA(ls_req) = CORRESPONDING z2ui5_s_rfc_req( lo_server->get_req_info( ) ).
+
+    CLEAR temp1.
+    MOVE-CORRESPONDING lo_server->get_req_info( ) TO temp1.
+
+    ls_req = temp1.
 
     IF ls_req-method = `POST`
        AND z2ui5_cl_ui5_http_handler=>_check_csrf_rejected(
@@ -59,17 +66,19 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
                referer = lo_server->get_header_field( `referer` )
                host    = lo_server->get_header_field( `host` ) ) = abap_true.
 
-      ls_res = VALUE #( body          = `CSRF validation failed - cross-origin POST rejected`
-                        status_code   = 403
-                        status_reason = `Forbidden` ).
+      CLEAR ls_res.
+      ls_res-body = `CSRF validation failed - cross-origin POST rejected`.
+      ls_res-status_code = 403.
+      ls_res-status_reason = `Forbidden`.
 
     ELSEIF ls_req-method = `HEAD`.
 
       " HEAD only ends the ICF session of a stateful app. Every RFC call runs
       " in its own context on the source system, so there is no session there
       " to end - answering here saves a roundtrip that could do nothing.
-      ls_res = VALUE #( status_code   = 200
-                        status_reason = `OK` ).
+      CLEAR ls_res.
+      ls_res-status_code = 200.
+      ls_res-status_reason = `OK`.
 
     ELSE.
 
@@ -93,10 +102,11 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
         " page - and that page suppresses the text, so the browser showed an
         " empty error overlay. The frontend renders the body of every non-2xx
         " response, so the RFC reason has to travel in it.
-        ls_res = VALUE #( body          = |RFC_CONNECTOR_ERROR - destination { c_destination }, |
-                                       && |subrc { sy-subrc } { lv_message }|
-                          status_code   = 500
-                          status_reason = `Internal Server Error` ).
+        CLEAR ls_res.
+        ls_res-body = |RFC_CONNECTOR_ERROR - destination { c_destination }, |
+&& |subrc { sy-subrc } { lv_message }|.
+        ls_res-status_code = 500.
+        ls_res-status_reason = `Internal Server Error`.
 
       ELSEIF ls_res-status_code IS INITIAL.
         " A source system still running a connector version whose
@@ -121,9 +131,15 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
   METHOD get_content_type.
 
-    result = COND #( WHEN status_code >= 400 THEN `text/plain; charset=UTF-8`
-                     WHEN method = `GET`     THEN `text/html; charset=UTF-8`
-                     ELSE `application/json; charset=UTF-8` ).
+    DATA temp2 TYPE string.
+    IF status_code >= 400.
+      temp2 = `text/plain; charset=UTF-8`.
+    ELSEIF method = `GET`.
+      temp2 = `text/html; charset=UTF-8`.
+    ELSE.
+      temp2 = `application/json; charset=UTF-8`.
+    ENDIF.
+    result = temp2.
 
   ENDMETHOD.
 
