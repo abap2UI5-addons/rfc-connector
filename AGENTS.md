@@ -46,7 +46,7 @@ three structures are a public interface:
 ## What this depends on in the core
 
 There is no version pin on the core — abaplint resolves it from its `main`
-branch. That is why both workflows also run on a weekly schedule: a rename
+branch. That is why `ci` also runs on a weekly schedule: a rename
 upstream breaks this repository silently, and with no pull request open nothing
 else would notice.
 
@@ -82,10 +82,31 @@ npm ci
 npm run check
 ```
 
-`npm run check` runs exactly what CI runs: abaplint (`abap-standard.yaml`) and
-the abap2UI5-linter (`check-abap2ui5.yaml`). This repository builds no view, so
-the linter runs with `allClasses` and without the render gate; what it adds is
-the released-API check.
+`npm run check` runs exactly what CI runs: abaplint and the abap2UI5-linter.
+This repository builds no view, so the linter runs with `allClasses` and
+without the render gate; what it adds is the released-API check.
+
+## CI
+
+CI comes from the shared CI template of abap2UI5-addons (reusable workflows in
+[rap-ext](https://github.com/abap2UI5-addons/rap-ext/blob/main/.github/ci/README.md),
+pinned by commit in the `uses:` lines and moved by `bump-deps`):
+
+* `ci` - on every push to `main`, every pull request, weekly and by hand,
+  one job per check: `check / abaplint (./abaplint.jsonc)` and
+  `check / abap2ui5lint` (render gate off). These are the required status
+  checks of the branch protection.
+* `ci-702` - on every push to `main` `npm run auto_downport`, a force-push
+  to the branch `702`, then abaplint on that branch
+  (`.github/abaplint/abap_702.jsonc`). Never commit to `702` by hand.
+* `deploy-pages`, `bump-deps` (monthly; the template pin moves only with the
+  `DEPS_TOKEN` secret).
+
+**No ABAP Cloud lint, on purpose.** The consumer's ICF handler
+`z2ui5_cl_rfc_connector_handler` implements `if_http_extension` (the classic
+ICF), which ABAP Cloud does not have - abaplint for Cloud reports 4 issues,
+all of them that interface; and an RFC destination call is not ABAP Cloud
+either. No ABAP Unit tests, no rename script, no `.github/deps.json`.
 
 Nothing offline can prove the RFC call itself, the SICF node or the round trip
 through a real destination. State in the pull request what was and was not

@@ -5,8 +5,8 @@
 [![abap2UI5](https://img.shields.io/badge/requires-abap2UI5-blue)](https://github.com/abap2UI5/abap2UI5)
 [![License](https://img.shields.io/github/license/abap2UI5-addons/rfc-connector)](LICENSE)
 <br>
-[![ABAP Standard](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/rfc-connector/abap-standard.yaml?branch=main&label=ABAP%20Standard)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/abap-standard.yaml)
-[![check-abap2UI5](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/rfc-connector/check-abap2ui5.yaml?branch=main&label=check-abap2UI5)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/check-abap2ui5.yaml)
+[![CI](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/rfc-connector/ci.yaml?branch=main&label=CI)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ci.yaml)
+[![ABAP 7.02](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/rfc-connector/ci-702.yaml?branch=main&label=ABAP%207.02)](https://github.com/abap2UI5-addons/rfc-connector/actions/workflows/ci-702.yaml)
 
 **Remotely call abap2UI5 apps via RFC.** The browser talks to a consumer
 system, which forwards every request through an SM59 RFC destination to the
@@ -103,8 +103,8 @@ npm ci
 npm run check
 ```
 
-`npm run check` runs exactly what CI runs: abaplint (`abap-standard.yaml`) and
-the abap2UI5-linter (`check-abap2ui5.yaml`).
+`npm run check` runs exactly what CI runs (`ci.yaml`, from the shared CI
+template of abap2UI5-addons): abaplint and the abap2UI5-linter.
 
 ## Contributing
 
