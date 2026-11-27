@@ -116,15 +116,23 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
           resource_failure      = 3
           OTHERS                = 4.
 
-      IF sy-subrc <> 0.
-        " The call never reached the source system, or failed there: the
-        " destination missing or not authorized, the system down, a short dump
-        " in the function module. The frontend renders the body of every
-        " non-2xx response in its error overlay, so a body has to be there - a
-        " short dump here would end in the ICF 500 page. It names no
-        " destination, host or user, and not the RFC message, which does: the
-        " overlay is shown to every user, the reason is for the administrator
-        " (SM59, ST22 and SM21 of the source system).
+      IF sy-subrc = 1.
+        " A system failure: the call reached the source system and failed
+        " there - mostly a short dump, often after the app's main( ) ran and
+        " committed. "Could not be reached" told the user nothing happened and
+        " invited a repeat of a posting.
+        ls_res = VALUE #( body          = `RFC_CONNECTOR_ERROR - the call failed on the source system (subrc 1) - ` &&
+                                         `the action may have been carried out there, check before you repeat it`
+                          status_code   = 502
+                          status_reason = `Bad Gateway` ).
+      ELSEIF sy-subrc <> 0.
+        " The call never reached the source system: the destination missing
+        " or not authorized, the system down, no resources. The frontend
+        " renders the body of every non-2xx response in its error overlay, so
+        " a body has to be there - a short dump here would end in the ICF 500
+        " page. Neither text names a destination, host or user, nor the RFC
+        " message, which does: the overlay is shown to every user, the reason
+        " is for the administrator (SM59, ST22 and SM21 of the source system).
         ls_res = VALUE #( body          = |RFC_CONNECTOR_ERROR - the source system could not be reached (subrc { sy-subrc })|
                           status_code   = 502
                           status_reason = `Bad Gateway` ).
