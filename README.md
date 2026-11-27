@@ -130,7 +130,8 @@ npm run check
 ```
 
 `npm run check` runs exactly what CI runs (`ci.yaml`, from the shared CI
-template of abap2UI5-addons): abaplint and the abap2UI5-linter.
+template of abap2UI5-addons): abaplint, the 7.02 downport of a scratch copy
+and the abap2UI5-linter.
 
 ## Contributing
 

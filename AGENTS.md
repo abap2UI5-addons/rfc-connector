@@ -82,7 +82,7 @@ npm ci
 npm run check
 ```
 
-`npm run check` runs exactly what CI runs: abaplint and the abap2UI5-linter.
+`npm run check` runs exactly what CI runs: abaplint, the 7.02 downport (`check:702`) and the abap2UI5-linter.
 This repository builds no view, so the linter runs with `allClasses` and
 without the render gate; what it adds is the released-API check.
 
@@ -95,7 +95,10 @@ pinned by commit in the `uses:` lines and moved by `bump-deps`):
 * `ci` - on every push to `main`, every pull request, weekly and by hand,
   one job per check: `check / abaplint (./abaplint.jsonc)` and
   `check / abap2ui5lint` (render gate off). These are the required status
-  checks of the branch protection.
+  checks of the branch protection. Also `check / npm run check:702`, the
+  7.02 gate of a pull request (`.github/scripts/check-702.sh` downports a
+  scratch copy of `src/` in `build/702` and lints it with
+  `.github/abaplint/abap_702.jsonc`; `src/` is never rewritten).
 * `ci-702` - on every push to `main` `npm run auto_downport`, a force-push
   to the branch `702`, then abaplint on that branch
   (`.github/abaplint/abap_702.jsonc`). Never commit to `702` by hand.
