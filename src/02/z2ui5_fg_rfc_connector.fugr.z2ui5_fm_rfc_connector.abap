@@ -20,14 +20,21 @@ FUNCTION z2ui5_fm_rfc_connector.
 * app_start and every other parameter reach the framework and the user exit.
 * A consumer still on a version without the two fields sends them empty,
 * which is the behaviour of that version.
-  DATA(ls_req) = CORRESPONDING z2ui5_cl_ui5_http_handler=>ty_s_http_req( is_req ).
+  DATA temp1 TYPE z2ui5_cl_ui5_http_handler=>ty_s_http_req.
+  DATA ls_req LIKE temp1.
+  DATA ls_res TYPE z2ui5_cl_ui5_http_handler=>ty_s_http_res.
+  CLEAR temp1.
+  MOVE-CORRESPONDING is_req TO temp1.
+
+  ls_req = temp1.
   ls_req-t_params = z2ui5_cl_ui5_util_context=>url_param_get_tab( |?{ is_req-query }| ).
 
 * _main( ) never raises - it turns any exception into a 500 whose body carries
 * the reason - so ES_RES always describes the response, status included. The
 * consumer only forwards it.
-  DATA(ls_res) = z2ui5_cl_ui5_http_handler=>_main( ls_req ).
 
-  es_res = CORRESPONDING #( ls_res ).
+  ls_res = z2ui5_cl_ui5_http_handler=>_main( ls_req ).
+
+  MOVE-CORRESPONDING ls_res TO es_res.
 
 ENDFUNCTION.

@@ -74,11 +74,22 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     " passed directly
     DATA lv_destination TYPE c LENGTH 32.
 
-    DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).
-    DATA(ls_info) = lo_server->get_req_info( ).
+    DATA lo_server TYPE REF TO z2ui5_cl_ui5_util_http.
+    DATA ls_info TYPE z2ui5_cl_ui5_util_http=>ty_s_http_req.
+    DATA temp1 TYPE z2ui5_s_rfc_req.
+    DATA ls_req LIKE temp1.
+    DATA temp2 TYPE z2ui5_if_client=>ty_t_name_value.
+    DATA ls_header LIKE LINE OF temp2.
+    lo_server = z2ui5_cl_ui5_util_http=>factory( server ).
+
+    ls_info = lo_server->get_req_info( ).
     " method, body, path and the raw query - the structure has no room for
     " the parsed t_params, the source system parses the query again
-    DATA(ls_req) = CORRESPONDING z2ui5_s_rfc_req( ls_info ).
+
+    CLEAR temp1.
+    MOVE-CORRESPONDING ls_info TO temp1.
+
+    ls_req = temp1.
 
     IF ls_req-method = `POST`
        AND z2ui5_cl_ui5_http_handler=>_check_csrf_rejected(
@@ -87,17 +98,19 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
                referer = lo_server->get_header_field( `referer` )
                host    = lo_server->get_header_field( `host` ) ) = abap_true.
 
-      ls_res = VALUE #( body          = `CSRF validation failed - cross-origin POST rejected`
-                        status_code   = 403
-                        status_reason = `Forbidden` ).
+      CLEAR ls_res.
+      ls_res-body = `CSRF validation failed - cross-origin POST rejected`.
+      ls_res-status_code = 403.
+      ls_res-status_reason = `Forbidden`.
 
     ELSEIF ls_req-method = `HEAD`.
 
       " HEAD only ends the ICF session of a stateful app. Every RFC call runs
       " in its own context on the source system, so there is no session there
       " to end - answering here saves a roundtrip that could do nothing.
-      ls_res = VALUE #( status_code   = 200
-                        status_reason = `OK` ).
+      CLEAR ls_res.
+      ls_res-status_code = 200.
+      ls_res-status_reason = `OK`.
 
     ELSE.
 
@@ -121,10 +134,11 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
         " there - mostly a short dump, often after the app's main( ) ran and
         " committed. "Could not be reached" told the user nothing happened and
         " invited a repeat of a posting.
-        ls_res = VALUE #( body          = `RFC_CONNECTOR_ERROR - the call failed on the source system (subrc 1) - ` &&
-                                         `the action may have been carried out there, check before you repeat it`
-                          status_code   = 502
-                          status_reason = `Bad Gateway` ).
+        CLEAR ls_res.
+        ls_res-body = `RFC_CONNECTOR_ERROR - the call failed on the source system (subrc 1) - ` &&
+`the action may have been carried out there, check before you repeat it`.
+        ls_res-status_code = 502.
+        ls_res-status_reason = `Bad Gateway`.
       ELSEIF sy-subrc <> 0.
         " The call never reached the source system: the destination missing
         " or not authorized, the system down, no resources. The frontend
@@ -133,9 +147,10 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
         " page. Neither text names a destination, host or user, nor the RFC
         " message, which does: the overlay is shown to every user, the reason
         " is for the administrator (SM59, ST22 and SM21 of the source system).
-        ls_res = VALUE #( body          = |RFC_CONNECTOR_ERROR - the source system could not be reached (subrc { sy-subrc })|
-                          status_code   = 502
-                          status_reason = `Bad Gateway` ).
+        CLEAR ls_res.
+        ls_res-body = |RFC_CONNECTOR_ERROR - the source system could not be reached (subrc { sy-subrc })|.
+        ls_res-status_code = 502.
+        ls_res-status_reason = `Bad Gateway`.
 
       ELSEIF ls_res-status_code IS INITIAL.
         " A source system still running a connector version whose
@@ -148,9 +163,10 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
     ENDIF.
 
     lo_server->set_cdata( ls_res-body ).
-    LOOP AT get_header_fields( method      = ls_req-method
-                               status_code = ls_res-status_code
-                               t_params    = ls_info-t_params ) INTO DATA(ls_header).
+
+    temp2 = get_header_fields( method = ls_req-method status_code = ls_res-status_code t_params = ls_info-t_params ).
+
+    LOOP AT temp2 INTO ls_header.
       lo_server->set_header_field( n = ls_header-n
                                    v = ls_header-v ).
     ENDLOOP.
@@ -161,25 +177,47 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
   METHOD get_header_fields.
 
-    result = VALUE #( ( n = `content-type`
-                        v = get_content_type( method      = method
-                                              status_code = status_code
-                                              t_params    = t_params ) ) ).
+    DATA temp3 TYPE z2ui5_if_client=>ty_t_name_value.
+    DATA temp4 LIKE LINE OF temp3.
+      DATA temp5 TYPE z2ui5_if_client=>ty_s_name_value.
+      DATA temp6 TYPE z2ui5_if_client=>ty_s_name_value.
+      DATA temp7 TYPE z2ui5_if_client=>ty_s_name_value.
+      DATA temp8 TYPE z2ui5_if_client=>ty_s_name_value.
+    CLEAR temp3.
+
+    temp4-n = `content-type`.
+    temp4-v = get_content_type( method = method
+status_code = status_code
+t_params = t_params ).
+    INSERT temp4 INTO TABLE temp3.
+    result = temp3.
 
     " The cache policy of the framework, per verb: the page and the bundles
     " carry no user or app data and may be stored, but are revalidated (with
     " no ETag to send, a revalidation is a full GET). Everything else - the
     " roundtrip data, an error, a HEAD - is never stored.
     IF method = `GET` AND status_code < 300.
-      INSERT VALUE #( n = `cache-control`
-                      v = `private, no-cache` ) INTO TABLE result.
+
+      CLEAR temp5.
+      temp5-n = `cache-control`.
+      temp5-v = `private, no-cache`.
+      INSERT temp5 INTO TABLE result.
     ELSE.
-      INSERT VALUE #( n = `cache-control`
-                      v = `no-cache, no-store, must-revalidate` ) INTO TABLE result.
-      INSERT VALUE #( n = `Pragma`
-                      v = `no-cache` ) INTO TABLE result.
-      INSERT VALUE #( n = `Expires`
-                      v = `0` ) INTO TABLE result.
+
+      CLEAR temp6.
+      temp6-n = `cache-control`.
+      temp6-v = `no-cache, no-store, must-revalidate`.
+      INSERT temp6 INTO TABLE result.
+
+      CLEAR temp7.
+      temp7-n = `Pragma`.
+      temp7-v = `no-cache`.
+      INSERT temp7 INTO TABLE result.
+
+      CLEAR temp8.
+      temp8-n = `Expires`.
+      temp8-v = `0`.
+      INSERT temp8 INTO TABLE result.
     ENDIF.
 
     INSERT LINES OF get_security_headers( ) INTO TABLE result.
@@ -190,22 +228,45 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
     " the names come lower-cased from the query parser - the framework's own
     " check of the bundle parameter reads them the same way
-    result = COND #( WHEN status_code >= 400 THEN `text/plain; charset=UTF-8`
-                     WHEN method <> `GET`    THEN `application/json; charset=UTF-8`
-                     WHEN line_exists( t_params[ n = c_bundle_param ] ) "#EC CI_SORTSEQ
-                                             THEN `application/javascript; charset=UTF-8`
-                     ELSE `text/html; charset=UTF-8` ).
+    DATA temp9 TYPE string.
+    DATA temp1 LIKE sy-subrc.
+    READ TABLE t_params WITH KEY n = c_bundle_param TRANSPORTING NO FIELDS.
+    temp1 = sy-subrc.
+    IF status_code >= 400.
+      temp9 = `text/plain; charset=UTF-8`.
+    ELSEIF method <> `GET`.
+      temp9 = `application/json; charset=UTF-8`.
+    ELSEIF temp1 = 0.
+      temp9 = `application/javascript; charset=UTF-8`.
+    ELSE.
+      temp9 = `text/html; charset=UTF-8`.
+    ENDIF.
+    result = temp9.
 
   ENDMETHOD.
 
   METHOD get_security_headers.
 
-    result = VALUE #(
-        ( n = `X-Content-Type-Options`       v = `nosniff` )
-        ( n = `X-Frame-Options`              v = `SAMEORIGIN` )
-        ( n = `Referrer-Policy`              v = `strict-origin-when-cross-origin` )
-        ( n = `Permissions-Policy`           v = `geolocation=(self), microphone=(self), camera=(self), payment=(), usb=()` )
-        ( n = `Cross-Origin-Resource-Policy` v = `same-origin` ) ).
+    DATA temp10 TYPE z2ui5_if_client=>ty_t_name_value.
+    DATA temp11 LIKE LINE OF temp10.
+    CLEAR temp10.
+
+    temp11-n = `X-Content-Type-Options`.
+    temp11-v = `nosniff`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-n = `X-Frame-Options`.
+    temp11-v = `SAMEORIGIN`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-n = `Referrer-Policy`.
+    temp11-v = `strict-origin-when-cross-origin`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-n = `Permissions-Policy`.
+    temp11-v = `geolocation=(self), microphone=(self), camera=(self), payment=(), usb=()`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-n = `Cross-Origin-Resource-Policy`.
+    temp11-v = `same-origin`.
+    INSERT temp11 INTO TABLE temp10.
+    result = temp10.
 
   ENDMETHOD.
 
