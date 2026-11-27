@@ -106,7 +106,15 @@ pinned by commit in the `uses:` lines and moved by `bump-deps`):
 `z2ui5_cl_rfc_connector_handler` implements `if_http_extension` (the classic
 ICF), which ABAP Cloud does not have - abaplint for Cloud reports 4 issues,
 all of them that interface; and an RFC destination call is not ABAP Cloud
-either. No ABAP Unit tests, no rename script, no `.github/deps.json`.
+either. No ABAP Unit tests, no `.github/deps.json`.
+
+**No namespace rename.** abaplint has no renamer for function groups or
+SUSH: tried 2026-11 with the `rename.mjs` of the other addons, it leaves
+`z2ui5_fg_rfc_connector` and its SUSH under their names, corrupts the
+`FUNCTION` line of the module and still reports 0 issues - a second copy
+would collide with the first. `z2ui5_cl_rfc_connector_handler` also has 30
+characters, which leaves a new prefix five. Do not add the script until
+abaplint renames FUGR.
 
 Nothing offline can prove the RFC call itself, the SICF node or the round trip
 through a real destination. State in the pull request what was and was not
