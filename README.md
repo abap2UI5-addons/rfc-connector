@@ -116,11 +116,18 @@ The consumer system receives the browser request, forwards method, body, path an
 ### Troubleshooting
 
 `RFC_CONNECTOR_ERROR - the source system could not be reached (subrc n)`
-(status 502) means the RFC call failed: subrc 1 a system failure on the
-source system (a short dump - ST22 there), subrc 2 a communication failure
-(destination missing, logon refused, system down - SM59 Connection Test and
-Authorization Test), subrc 3 no resources. The text names no destination,
-host or user on purpose - every user can see it.
+(status 502) means the RFC call failed before it got to the source system:
+subrc 2 a communication failure (destination missing, logon refused, system
+down - SM59 Connection Test and Authorization Test), subrc 3 no resources.
+
+`RFC_CONNECTOR_ERROR - the call failed on the source system (subrc 1) - the
+action may have been carried out there, check before you repeat it` (status
+502) is a system failure on the source system, mostly a short dump (ST22
+there) - often after the app's event ran and committed. Look at the data
+before the user repeats a posting.
+
+Neither text names a destination, host or user, on purpose - every user can
+see it.
 
 ## Development
 
