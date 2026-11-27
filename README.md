@@ -51,7 +51,7 @@ browser talks to and the **source system** the apps run on.
 - On the consumer system: a destination in SM59 (type 3) pointing to the
   source system, with login data maintained
 
-**Renamed (2026-11).** The structures `Z2UI5_S_HTTP_REQ`, `_RES` and `_CONFIG` are `Z2UI5_S_RFC_REQ`, `_RES` and `_CONFIG` now, and the function module is spelled `Z2UI5_FM_RFC_CONNECTOR`. RFC matches the structures by their fields, so a system on the old names still talks to one on the new names. After the pull abapGit lists the old structures as deleted in the repository - delete them.
+**Renamed (2026-11).** The structures `Z2UI5_S_HTTP_REQ`, `_RES` and `_CONFIG` are `Z2UI5_S_RFC_REQ`, `_RES` and `_CONFIG` now, and the function module is spelled `Z2UI5_FM_RFC_CONNECTOR`. RFC matches the structures by their fields, so a system on the old names still talks to one on the new names. The wrapper under the function module's misspelled name is removed: consumer and source have to be on this version together. After the pull abapGit lists the old structures and the old function module as deleted in the repository - delete them.
 
 **Steps** - with [abapGit](https://abapgit.org):
 
@@ -63,10 +63,10 @@ browser talks to and the **source system** the apps run on.
 1. Install [abap2UI5](https://github.com/abap2UI5/abap2UI5) on both systems.
 2. Install this repository on **both** systems — the same version on each:
    consumer and source exchange the DDIC structures of this repository over RFC.
-   When you update, update the **source system first**: the consumer calls
-   `Z2UI5_FM_RFC_CONNECTOR`, which an older source does not have yet. The
-   source keeps `Z2UI5_FM_RFC_CONECTOR`, the misspelled name of earlier
-   versions, so consumers that are not updated yet carry on working.
+   When you update from a version before 2026-11, update **both systems
+   together**: the consumer calls `Z2UI5_FM_RFC_CONNECTOR`, which an older
+   source does not have, and the source no longer answers to the misspelled
+   name the older consumers call.
 3. On the **consumer system**, replace in the HTTP handler
    `Z2UI5_CL_RFC_CONNECTOR_HANDLER` the destination `NONE` with your source
    system destination.
