@@ -35,7 +35,7 @@ rfc-connector puts a thin ICF handler on a consumer system that the browser talk
 - Standard ABAP 7.50 or higher on both systems; NetWeaver 7.02 - 7.40 through the downported branch 702
 - abap2UI5 1.143.0 or newer on both systems
 - abap2UI5 1.147.0 or newer on the consumer to forward URL parameters
-- An SM59 destination (type 3) on the consumer system pointing to the source system with login data
+- An SM59 destination (type 3) on the consumer system pointing to the source system as a trusted RFC connection with the current user - never a fixed technical user
 - Stateless apps only; request headers are not forwarded
 
 ## Installation
