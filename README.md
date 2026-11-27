@@ -97,6 +97,15 @@ The consumer system receives the browser request, forwards method, body, path an
 * **The consumer forwards method, body, path, query string and status — not headers.** Everything abap2UI5 needs for a roundtrip travels in the body and the URL; a request header an app reads through the user exit on the source system does not.
 * **Response headers are the consumer's own.** Only body and status come back from the source system, so the consumer sets the response headers the way abap2UI5 does by default: the content type (page, bundle, JSON roundtrip, plain-text error), the cache policy (the page and the bundles revalidated, everything else `no-store`) and the default security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Resource-Policy`). Security headers a user exit adds on the source system do not reach the browser - change them in `Z2UI5_CL_RFC_CONNECTOR_HANDLER` (`get_security_headers`) as well - and the page and the bundles have no ETag, so a reload fetches them again instead of getting a 304.
 
+### Troubleshooting
+
+`RFC_CONNECTOR_ERROR - the source system could not be reached (subrc n)`
+(status 502) means the RFC call failed: subrc 1 a system failure on the
+source system (a short dump - ST22 there), subrc 2 a communication failure
+(destination missing, logon refused, system down - SM59 Connection Test and
+Authorization Test), subrc 3 no resources. The text names no destination,
+host or user on purpose - every user can see it.
+
 ## Development
 
 ```sh

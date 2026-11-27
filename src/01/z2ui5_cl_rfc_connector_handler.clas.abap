@@ -70,10 +70,8 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
 
     DATA ls_res         TYPE z2ui5_s_rfc_res.
     DATA ls_config      TYPE z2ui5_s_rfc_config.
-    DATA lv_message     TYPE string.
-    " DESTINATION takes a character field, so the constant cannot be passed
-    " directly - the constant itself stays a string, so the error message
-    " below does not carry the padding of a fixed-length field
+    " DESTINATION takes a character field, so the string constant cannot be
+    " passed directly
     DATA lv_destination TYPE c LENGTH 32.
 
     DATA(lo_server) = z2ui5_cl_ui5_util_http=>factory( server ).
@@ -113,20 +111,23 @@ CLASS z2ui5_cl_rfc_connector_handler IMPLEMENTATION.
         IMPORTING
           es_res                = ls_res
         EXCEPTIONS
-          system_failure        = 1 MESSAGE lv_message
-          communication_failure = 2 MESSAGE lv_message
+          system_failure        = 1
+          communication_failure = 2
           resource_failure      = 3
           OTHERS                = 4.
 
       IF sy-subrc <> 0.
-        " This used to be an ASSERT, which ends in a short dump and the ICF 500
-        " page - and that page suppresses the text, so the browser showed an
-        " empty error overlay. The frontend renders the body of every non-2xx
-        " response, so the RFC reason has to travel in it.
-        ls_res = VALUE #( body          = |RFC_CONNECTOR_ERROR - destination { c_destination }, |
-                                       && |subrc { sy-subrc } { lv_message }|
-                          status_code   = 500
-                          status_reason = `Internal Server Error` ).
+        " The call never reached the source system, or failed there: the
+        " destination missing or not authorized, the system down, a short dump
+        " in the function module. The frontend renders the body of every
+        " non-2xx response in its error overlay, so a body has to be there - a
+        " short dump here would end in the ICF 500 page. It names no
+        " destination, host or user, and not the RFC message, which does: the
+        " overlay is shown to every user, the reason is for the administrator
+        " (SM59, ST22 and SM21 of the source system).
+        ls_res = VALUE #( body          = |RFC_CONNECTOR_ERROR - the source system could not be reached (subrc { sy-subrc })|
+                          status_code   = 502
+                          status_reason = `Bad Gateway` ).
 
       ELSEIF ls_res-status_code IS INITIAL.
         " A source system still running a connector version whose
