@@ -49,7 +49,8 @@ browser talks to and the **source system** the apps run on.
   the user exit, …) are forwarded only when the consumer runs an abap2UI5
   release **1.147.0 or newer**; on an older one they stay behind, as before.
 - On the consumer system: a destination in SM59 (type 3) pointing to the
-  source system, with login data maintained
+  source system, with a logon that **propagates the calling user** - see
+  [User propagation](#user-propagation)
 
 **Renamed (2026-11).** The structures `Z2UI5_S_HTTP_REQ`, `_RES` and `_CONFIG` are `Z2UI5_S_RFC_REQ`, `_RES` and `_CONFIG` now, and the function module is spelled `Z2UI5_FM_RFC_CONNECTOR`. RFC matches the structures by their fields, so a system on the old names still talks to one on the new names. The wrapper under the function module's misspelled name is removed: consumer and source have to be on this version together. After the pull abapGit lists the old structures and the old function module as deleted in the repository - delete them.
 
@@ -77,6 +78,21 @@ browser talks to and the **source system** the apps run on.
 **Start** - call the endpoint `.../sap/bc/z2ui5_rfc` of the **consumer
 system** in your browser.
 
+### User propagation
+
+The apps run on the source system as whatever user the RFC destination logs
+on with. Configure it to log on as **the user who is calling** the consumer
+system: a trusted RFC connection (trust relationship in SMT1 on the source
+system, "Trusted System: Yes" and "Current User" in the destination's
+*Logon & Security*, and the authorization object `S_RFCACL` for the users).
+
+**Never a fixed technical user.** With user and password maintained in the
+destination every browser user runs every app as that one user on the
+source system: its authorizations apply to everyone, `sy-uname` is the same
+for all, and abap2UI5 binds a draft to the user who created it - with one
+user for all of them that binding is gone, and any user can resume another
+user's draft.
+
 ## Usage
 
 ### Approach
@@ -95,6 +111,16 @@ The consumer system receives the browser request, forwards method, body, path an
 
 * **Stateless apps only.** A stateful app (`client->set_session_stateful( )`) needs the ICF session of the system the app runs on, and every RFC call gets a fresh context on the source system. Apps keeping their state in the draft table — the abap2UI5 default — work unchanged.
 * **The consumer forwards method, body, path, query string and status — not headers.** Everything abap2UI5 needs for a roundtrip travels in the body and the URL; a request header an app reads through the user exit on the source system does not.
+* **Response headers are the consumer's own.** Only body and status come back from the source system, so the consumer sets the response headers the way abap2UI5 does by default: the content type (page, bundle, JSON roundtrip, plain-text error), the cache policy (the page and the bundles revalidated, everything else `no-store`) and the default security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Resource-Policy`). Security headers a user exit adds on the source system do not reach the browser - change them in `Z2UI5_CL_RFC_CONNECTOR_HANDLER` (`get_security_headers`) as well - and the page and the bundles have no ETag, so a reload fetches them again instead of getting a 304.
+
+### Troubleshooting
+
+`RFC_CONNECTOR_ERROR - the source system could not be reached (subrc n)`
+(status 502) means the RFC call failed: subrc 1 a system failure on the
+source system (a short dump - ST22 there), subrc 2 a communication failure
+(destination missing, logon refused, system down - SM59 Connection Test and
+Authorization Test), subrc 3 no resources. The text names no destination,
+host or user on purpose - every user can see it.
 
 ## Development
 
